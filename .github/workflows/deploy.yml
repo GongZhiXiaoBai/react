@@ -1,17 +1,17 @@
-name: React/Next 自动部署到阿里云
+name: Next.js 全自动部署
 
 on:
   push:
     branches: [ main ]
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js 20
+      - name: Use Node.js 20
         uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -19,15 +19,29 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build project
+      - name: Build project（CI里构建，服务器不构建）
         run: npm run build
 
-      # 🔥 这是最稳的部署方式，永远不会报密钥错
-      - name: Deploy to Aliyun
+      # 第一步：上传所有文件到服务器
+      - name: Upload files to server
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.REMOTE_HOST }}
           username: root
           key: ${{ secrets.SSH_KEY }}
-          source: ".next/"  # 如果你是 Next.js 改成 .next/
-          target: "/home/react-deploy"
+          source: ".next,package.json,package-lock.json,node_modules"
+          target: "/root/next-project"
+
+      # 第二步：自动重启服务（关键！）
+      - name: Restart Next.js app
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: root
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /root/next-project
+            # 安装 pm2 用来永久后台运行项目
+            npm install -g pm2
+            # 重启/启动项目
+            pm2 restart next-app || pm2 start npm --name "next-app" -- start
