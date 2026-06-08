@@ -1,6 +1,5 @@
 name: React 自动部署到阿里云
 
-# 触发条件：代码推送到 main 分支就自动部署
 on:
   push:
     branches: [ main ]
@@ -10,28 +9,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. 拉取代码
       - name: 拉取代码
         uses: actions/checkout@v4
 
-      # 2. 安装 Node.js
+      # 这里改成 Node 20 就好了！
       - name: 安装 Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
 
-      # 3. 安装依赖 + 打包构建（这就是 CI）
       - name: 安装依赖并构建
         run: |
           npm install
           npm run build
 
-      # 4. 上传到阿里云服务器（这就是 CD）
       - name: 部署到阿里云
-        # uses: easingthemes/ssh-deploy@v5
         uses: easingthemes/ssh-deploy@v4.1.8
-
-        with:
+        env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_KEY }}
           ARGS: "-rltgoDzvO --delete"
           SOURCE: "dist/"
