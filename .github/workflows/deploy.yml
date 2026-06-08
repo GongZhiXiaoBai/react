@@ -28,7 +28,9 @@ jobs:
 
       # 4. 上传到阿里云服务器（这就是 CD）
       - name: 部署到阿里云
-        uses: easingthemes/ssh-deploy@v5
+        # uses: easingthemes/ssh-deploy@v5
+        uses: easingthemes/ssh-deploy@v4.1.8
+
         with:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_KEY }}
           ARGS: "-rltgoDzvO --delete"
