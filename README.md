@@ -42,4 +42,7 @@ REMOTE_HOST
 SSH_KEY
 值：你刚才复制的 id_rsa 私钥
 
+
+注意服务器的node版本，使用nvm减弱内存压力，
+
 ## 部署
