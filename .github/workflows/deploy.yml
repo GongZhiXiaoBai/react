@@ -41,5 +41,5 @@ jobs:
             [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
             nvm use default
             cd /home/next-project
-            npm install -g pm2
+            # npm install -g pm2
             pm2 restart next-app || pm2 start "npm run start" --name "next-app"
