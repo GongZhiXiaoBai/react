@@ -44,4 +44,4 @@ jobs:
             # 安装 pm2 用来永久后台运行项目
             npm install -g pm2
             # 重启/启动项目
-            pm2 restart next-app || pm2 start npm --name "next-app" -- start
+            pm2 restart next-app || pm2 start "npm run start" --name "next-app"

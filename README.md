@@ -43,6 +43,11 @@ SSH_KEY
 值：你刚才复制的 id_rsa 私钥
 
 
+
+3.配置 GitHub Actions（核心）
+在项目根目录新建：.github/workflows/deploy.yml
+
+
 注意服务器的node版本，使用nvm减弱内存压力，
 
 ## 部署
